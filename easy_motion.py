@@ -36,7 +36,7 @@ class JumpGroupGenerator:
     def determine_re_flags(self, character):
         if character == 'enter':
             return '(?m)'
-        elif self.case_sensitive:
+        elif not self.case_sensitive:
             return '(?i)'
         else:
             return ''
