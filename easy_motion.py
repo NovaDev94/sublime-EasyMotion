@@ -71,7 +71,6 @@ class JumpGroupGenerator:
                     self.jump_target_index += 1
                 else:
                     break
-
             jump_target_groups.append(jump_group)
 
         return jump_target_groups
@@ -151,11 +150,12 @@ class EasyMotionCommand(sublime_plugin.WindowCommand):
 
     def run(self, character=None, select_text=False):
         global JUMP_GROUP_GENERATOR, SELECT_TEXT, JUMP_TARGET_SCOPE, JUMP_TARGET_ICON
-        sublime.status_message("EasyMotion: Jump to " + character)
 
         SELECT_TEXT = select_text
 
         active_view = self.window.active_view()
+        if active_view.settings().get('easy_motion_mode'):
+            return
 
         settings = sublime.load_settings("EasyMotion.sublime-settings")
         placeholder_chars = settings.get('placeholder_chars', 'abcdefghijklmnopqrstuvwxyz01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ')
