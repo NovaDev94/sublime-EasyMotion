@@ -15,6 +15,7 @@ EASY_MOTION_EDIT = None
 SELECT_TEXT = False
 COMMAND_MODE_WAS = False
 JUMP_TARGET_SCOPE = 'string'
+JUMP_TARGET_ICON = 'dot'
 
 
 class JumpGroupGenerator:
@@ -149,7 +150,7 @@ class EasyMotionCommand(sublime_plugin.WindowCommand):
     winning_selection = None
 
     def run(self, character=None, select_text=False):
-        global JUMP_GROUP_GENERATOR, SELECT_TEXT, JUMP_TARGET_SCOPE
+        global JUMP_GROUP_GENERATOR, SELECT_TEXT, JUMP_TARGET_SCOPE, JUMP_TARGET_ICON
         sublime.status_message("EasyMotion: Jump to " + character)
 
         SELECT_TEXT = select_text
@@ -159,6 +160,7 @@ class EasyMotionCommand(sublime_plugin.WindowCommand):
         settings = sublime.load_settings("EasyMotion.sublime-settings")
         placeholder_chars = settings.get('placeholder_chars', 'abcdefghijklmnopqrstuvwxyz01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ')
         JUMP_TARGET_SCOPE = settings.get('jump_target_scope', 'string')
+        JUMP_TARGET_ICON = settings.get('jump_target_icon', 'dot') or ''
         case_sensitive = settings.get('case_sensitive', True)
 
         JUMP_GROUP_GENERATOR = JumpGroupGenerator(active_view, character, placeholder_chars, case_sensitive)
@@ -243,7 +245,7 @@ class JumpTo(sublime_plugin.WindowCommand):
                         return sublime.Region(current_selection.end(), winning_region.begin())
                     else:
                         return sublime.Region(current_selection.begin(), winning_region.end())
-            elif in_insert_mode: 
+            elif in_insert_mode:
                 return sublime.Region(winning_region.begin()+1, winning_region.begin()+1)
             else:
                 return sublime.Region(winning_region.begin(), winning_region.begin())
